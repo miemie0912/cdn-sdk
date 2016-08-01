@@ -53,19 +53,18 @@ class CdnUpload {
     public function upload() {
 
         // 构建上传表单
-        $file = $_FILES['files']['name'];
-        $tmpFile = $_FILES['files']['tmp_name'];
-        
-        $fsize = filesize($tmpFile);
+        $file           = $_FILES['files']['name'];
+        $tmpFile        = $_FILES['files']['tmp_name'];
+        $fsize          = filesize($tmpFile);
         $fileBinaryData = fread(fopen($tmpFile,r),$fsize);
         
         $token = $this->createToken();
-        $host = C('HOST');
+        $host  = C('HOST');
         $year  = date('Y');
         $month = date('m');
         $day   = date('d');
-        $path = 'php/'.$year.'/'.$month.'/'.$day.'/'.$file;
-        $data = array (
+        $path  = 'php/' . $year .'/'. $month .'/'. $day .'/'. $file;
+        $data  = array (
             'token'          => $token,           // 上传凭证
             'key'            => $path,            // 自定义文件名
             'file'           => "@$tmpFile",      // 原文件名
@@ -80,10 +79,10 @@ class CdnUpload {
             //'Content-Length: ' . strlen($data)
         );
         
-        $url = C('REQUESTURL');
+        $url    = C('REQUESTURL');
         $result = $this->curl($url, $data, $header);
         if (!isset($result['code'])) {
-        	$result = array('apath' => C('DOMIAN').$path, 'rpath' => $path);
+        	$result = array('apath' => C('DOMIAN') . $path, 'rpath' => $path);
         } else {
         	$result;
         }
@@ -102,7 +101,6 @@ class CdnUpload {
      * @throws Exception
      */
     public function curl($url, $postFields = null, $header = null) {
-
 		$ch = curl_init();
 		
 		//加@符号curl就会把它当成是文件上传处理
