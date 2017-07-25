@@ -76,7 +76,7 @@ class CdnUpload {
             'Host:' . $host,
             'Accept:*/*',
             'Content-Type: multipart/form-data;',
-            //'Content-Length: ' . strlen($data)
+            'Content-Length: ' . strlen($data)
         );
         
         $url    = C('REQUESTURL');
@@ -101,23 +101,25 @@ class CdnUpload {
      * @throws Exception
      */
     public function curl($url, $postFields = null, $header = null) {
-		$ch = curl_init();
+	$ch = curl_init();
 		
-		//加@符号curl就会把它当成是文件上传处理
-		curl_setopt($ch,CURLOPT_URL,$url);
-		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-		curl_setopt($ch,CURLOPT_POST,true);
-		curl_setopt($ch,CURLOPT_POSTFIELDS,$postFields);
-		
+	//加@符号curl就会把它当成是文件上传处理
+	curl_setopt($ch,CURLOPT_URL,$url);
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($ch,CURLOPT_POST,true);
+	curl_setopt($ch,CURLOPT_POSTFIELDS,$postFields);
         if (!empty($header) && is_array($header)) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         }
         $result = curl_exec($ch);
-		curl_close($ch);
+	curl_close($ch);
         return $result;
     }
 
 
+    /**
+     * 对象转数组
+     */
     private function object2array(&$object) {
         return json_decode(json_encode($object), true);
     }
